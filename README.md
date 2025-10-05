@@ -142,32 +142,161 @@ Match information:
 
 ## 🤖 LangChain Tools
 
-The agent has access to powerful tools:
+The agent has access to powerful tools for comprehensive FPL analysis. All tools are located in the `tools/` directory and are decorated with `@tool` for LangChain integration.
 
-- `analyze_player_form`: Analyze recent player performance
-- `compare_players`: Compare two players across metrics
-- `find_best_players_by_position`: Find top performers within budget
-- `analyze_my_team`: Comprehensive team analysis
+### Player Analysis Tools
+**Location:** `tools/player_tools.py`
+
+#### `search_player_by_name(name: str)`
+**Use Cases:**
+- Quickly find a player's basic information
+- Get player ID for further analysis
+- Check current price and ownership
+- Verify player exists before detailed analysis
+
+**Returns:** Player name, ID, team, position, price, total points, form, and ownership percentage
+
+**Example:** `search_player_by_name("Salah")` → Find Mohamed Salah's current stats
+
+---
+
+#### `get_player_detailed_stats(player_name: str)`
+**Use Cases:**
+- Deep dive into a player's season performance
+- Analyze recent form (last 5 gameweeks)
+- Review upcoming fixture difficulty
+- Calculate value metrics (points per million)
+- Make informed transfer decisions
+
+**Returns:** Comprehensive analysis including:
+- Basic info (position, team, price, ownership)
+- Season performance (total points, PPG, form, goals, assists, clean sheets)
+- Recent form with points breakdown
+- Next 5 fixtures with difficulty ratings
+- Value metrics (points per £1m, ICT index)
+
+**Example:** `get_player_detailed_stats("Haaland")` → Full analysis of Erling Haaland
+
+---
+
+#### `compare_two_players(player1_name: str, player2_name: str)`
+**Use Cases:**
+- Make transfer decisions between two options
+- Compare premium vs budget options
+- Evaluate similar players in same position
+- Determine better value for money
+
+**Returns:** Side-by-side comparison of:
+- Price
+- Total points and points per game
+- Form and ownership
+- Goals, assists, clean sheets
+- Value analysis (points per £1m)
+
+**Example:** `compare_two_players("Haaland", "Watkins")` → Head-to-head striker comparison
+
+---
+
+#### `find_best_players_by_position(position: str, max_price: float = 15.0, min_minutes: int = 200)`
+**Use Cases:**
+- Find transfer targets within budget
+- Discover differential picks (low ownership, high value)
+- Identify best value players by position
+- Build your initial squad
+- Find bench fodder (low price, guaranteed minutes)
+
+**Parameters:**
+- `position`: "Goalkeeper", "Defender", "Midfielder", or "Forward"
+- `max_price`: Maximum price in millions (e.g., 8.5)
+- `min_minutes`: Minimum minutes played (filters out non-starters)
+
+**Returns:** Top 10 players sorted by points per million with:
+- Full name and price
+- Total points, PPM, and form
+- Ownership percentage and minutes played
+
+**Example:** `find_best_players_by_position("midfielder", 8.0, 300)` → Best midfielders under £8m with 300+ minutes
+
+---
+
+### Team Analysis Tools
+**Location:** `tools/team_tools.py` *(Coming Soon)*
+
+- `analyze_my_team`: Comprehensive analysis of your current squad
+- `identify_underperforming_players`: Find players not delivering points
+- `get_team_value_and_bank`: Check team value and available budget
+- `optimize_lineup_for_gameweek`: Best 11 players and captain for upcoming GW
+
+### Fixture Analysis Tools
+**Location:** `tools/fixture_tools.py` *(Coming Soon)*
+
+- `analyze_upcoming_fixtures`: Fixture difficulty for teams over next N gameweeks
+- `get_fixtures_for_gameweek`: All matches in a specific gameweek
+- `find_teams_with_best_fixtures`: Identify teams with favorable schedules
+- `get_double_gameweek_teams`: Find teams with multiple fixtures in one GW
+
+### Transfer Strategy Tools
+**Location:** `tools/transfer_tools.py` *(Coming Soon)*
+
 - `suggest_transfers`: AI-powered transfer recommendations
-- `analyze_upcoming_fixtures`: Fixture difficulty analysis
-- `optimize_team_for_gameweek`: Best lineup suggestions
-- `get_differential_picks`: Find high-value, low-owned players
+- `calculate_transfer_impact`: Predict points gain/loss from specific transfer
+- `get_price_change_predictions`: Players likely to rise/fall in price
+- `get_differential_picks`: High-value, low-owned players for rank climbing
+
+### Statistical Analysis Tools
+**Location:** `tools/statistics_tools.py` *(Coming Soon)*
+
+- `get_top_scorers`: Highest scoring players overall or by position
+- `get_most_selected_players`: Most owned players across all managers
+- `calculate_effective_ownership`: Adjusted ownership including captaincy
+- `get_form_table`: Players ranked by recent form
+
+---
+
+### 🧪 Testing the Tools
+
+Run the demo script to see all tools in action:
+```bash
+python demo_tools.py
+```
+
+Run the test suite to verify all components:
+```bash
+python test_basic.py
+```
 
 ## 📊 Project Status
 
 **Current Phase**: Phase 1 - Core Infrastructure ✅
 
-- [x] Project structure
+### Completed ✅
+- [x] Project structure with OOP architecture
+- [x] Configuration management with Pydantic
 - [x] API client with caching and error handling
-- [x] Bootstrap API module
-- [x] Manager API module
-- [x] Player API module
-- [x] Fixtures API module
-- [ ] LangChain tools implementation
-- [ ] ReAct agent setup
-- [ ] CLI interface
-- [ ] Strategy modules
-- [ ] Testing suite
+- [x] Bootstrap API module (players, teams, gameweeks)
+- [x] Manager API module (team info, history, transfers)
+- [x] Player API module (detailed stats, fixtures, history)
+- [x] Fixtures API module (all matches, by GW, by team)
+- [x] **LangChain Player Tools (4 tools)** - `tools/player_tools.py`
+  - search_player_by_name
+  - get_player_detailed_stats
+  - compare_two_players
+  - find_best_players_by_position
+- [x] Comprehensive testing suite
+- [x] Demo scripts and documentation
+
+### In Progress 🚧
+- [ ] Team analysis tools - `tools/team_tools.py`
+- [ ] Fixture analysis tools - `tools/fixture_tools.py`
+- [ ] Transfer strategy tools - `tools/transfer_tools.py`
+- [ ] Statistical analysis tools - `tools/statistics_tools.py`
+
+### Upcoming 📋
+- [ ] ReAct agent implementation - `agents/fpl_agent.py`
+- [ ] Custom prompts for FPL context - `agents/prompts.py`
+- [ ] CLI interface - `main.py`
+- [ ] Strategy modules (predictions, recommendations)
+- [ ] Advanced features (gameweek briefings, price tracking)
 
 ## 🤝 Contributing
 
