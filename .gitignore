@@ -55,3 +55,4 @@ logs/
 *.log
 data/
 evals/failed_queries.jsonl
+evals/reports/
