@@ -4,14 +4,15 @@ An intelligent AI agent built with LangChain and Azure OpenAI to help you domina
 
 ## 🎯 Features
 
-- **Intelligent Chat Interface**: Natural language conversations about your FPL team
-- **Transfer Recommendations**: AI-powered suggestions based on form, fixtures, and value
-- **Player Analysis**: Deep dive into player statistics, form, and upcoming fixtures
-- **Team Optimization**: Get lineup suggestions for maximum points
-- **Captain Selection**: Data-driven captaincy recommendations
-- **Fixture Analysis**: Understand fixture difficulty and plan ahead
-- **League Tracking**: Monitor your position across all your leagues
-- **Gameweek Briefings**: Automated summaries of key information before each gameweek
+- **🤖 Intelligent Chat Interface**: Natural language conversations powered by Azure OpenAI (GPT-4)
+- **🔍 Player Search & Analysis**: Search players, get detailed stats, and compare performance
+- **📊 8 Specialized Tools**: 4 player analysis tools + 4 gameweek tracking tools
+- **📅 Gameweek Tracking**: Real-time current gameweek info, deadlines, and season progress
+- **💡 Smart Recommendations**: AI-powered insights based on real FPL data
+- **🎨 Beautiful Terminal UI**: Rich interface with panels, tables, and formatted output
+- **🆔 Optional Team ID**: Explore FPL data without a team or get personalized advice with your ID
+- **💾 Conversation Memory**: Context-aware responses that remember your previous questions
+- **📝 Query Logging**: Track and review queries with `/log` command for continuous improvement
 
 ## 🏗️ Architecture
 
@@ -66,47 +67,94 @@ OPENAI_API_VERSION=2024-07-01-preview
 
 ### Usage
 
+**Interactive Mode (Recommended):**
 ```bash
-python main.py --team-id YOUR_FPL_TEAM_ID
+python main.py
 ```
 
-Example:
-```bash
-python main.py --team-id 7798096
-```
+The agent will:
+1. Display a welcome banner with features and commands
+2. Ask if you want to provide your FPL Team ID (optional)
+3. Validate your team ID and show team information
+4. Start an interactive chat session
+
+**Special Commands:**
+- `/team` - Set or view your FPL team ID
+- `/help` - Show available commands and example questions
+- `/clear` - Clear conversation history
+- `/log` - Log current query as failed for review (saves to `evals/failed_queries.jsonl`)
+- `/exit` - Exit the agent
+
+**Note:** You can explore FPL data without a team ID. The agent will only prompt for it when you ask team-specific questions.
+
+**Example Questions to Try:**
+- "What gameweek are we in?"
+- "Find me the best midfielders under £8m"
+- "Compare Haaland and Watkins"
+- "Show me Salah's detailed stats"
+- "What's the season progress?"
 
 ## 💬 Example Conversations
 
 ```
-> What transfers should I make this week?
+You: What gameweek are we in?
 
-🤔 Analyzing your team...
+🔧 Using tool: get_current_gameweek_info
 
-Based on my analysis of your team, form, fixtures, and budget:
+🤖 Agent: We are currently in Gameweek 7 of the 2024/25 season.
 
-📊 Current Issues:
-- Player X has tough fixtures (AVG FDR: 4.2) for next 3 GWs
-- You're lacking midfield coverage from top teams
-- £2.5M in the bank
+**Current Gameweek: 7**
+- Name: Gameweek 7
+- Deadline: 2025-10-03T17:30:00Z
+- Status: In Progress
+- Average Score: 60 points
+- Highest Score: 135 points
 
-💡 Recommended Transfers:
-1. OUT: Player X → IN: Player Y (Expected gain: +12 pts over 3 GWs)
-   Reason: Player Y has excellent fixtures, in top form
+---
 
-> Who should captain this week?
+You: Find me the best midfielders under £8m
 
-🎯 Captain Recommendation for GW 15:
-Captain: Haaland (vs Fulham H)
-Reasoning: Home fixture, scored in last 3 home games, FDR 2
+🔧 Using tool: find_best_players_by_position
 
-> Show my team performance
+🤖 Agent: Here are the best midfielders under £8.0m based on points per million:
 
-📊 Your Team: "Team Name"
-Current GW: 15
-Overall Rank: 182,456 (↑ 12,340 from last GW)
-Total Points: 734
-GW Points: 52
+1. **Bryan Mbeumo** (£7.5m) - 52 pts, 6.93 PPM, Form: 5.8
+2. **Bukayo Saka** (£7.9m) - 48 pts, 6.08 PPM, Form: 4.8
+...
 
+---
+
+You: Compare Haaland and Watkins
+
+🔧 Using tool: compare_two_players
+
+🤖 Agent: Here's a detailed comparison:
+
+**Erling Haaland vs Ollie Watkins**
+
+Price: £15.1m vs £8.8m
+Total Points: 68 vs 42
+Points per Game: 11.3 vs 6.0
+Form: 7.8 vs 4.2
+
+Haaland is significantly more expensive but delivers nearly double the points...
+
+---
+
+You: Show me Salah's detailed stats
+
+🔧 Using tool: get_player_detailed_stats
+
+🤖 Agent: Here's Mohamed Salah's comprehensive analysis:
+
+**Mohamed Salah** - Liverpool Midfielder
+Price: £12.5m | Selected by: 45.2%
+
+**Season Performance:**
+- Total Points: 56
+- Points per Game: 8.0
+- Goals: 4 | Assists: 4
+- Bonus: 8
 ...
 ```
 
@@ -142,9 +190,11 @@ Match information:
 
 ## 🤖 LangChain Tools
 
-The agent has access to powerful tools for comprehensive FPL analysis. All tools are located in the `tools/` directory and are decorated with `@tool` for LangChain integration.
+The agent has access to **8 specialized tools** for comprehensive FPL analysis. All tools are located in the `tools/` directory and are decorated with `@tool` for LangChain integration.
 
-### Player Analysis Tools
+📚 **[See TOOLS.md for complete tool documentation](TOOLS.md)**
+
+### Player Analysis Tools (4 tools)
 **Location:** `tools/player_tools.py`
 
 #### `search_player_by_name(name: str)`
@@ -219,50 +269,113 @@ The agent has access to powerful tools for comprehensive FPL analysis. All tools
 
 ---
 
-### Team Analysis Tools
-**Location:** `tools/team_tools.py` *(Coming Soon)*
+### Gameweek Tools (4 tools)
+**Location:** `tools/general_tools.py`
 
-- `analyze_my_team`: Comprehensive analysis of your current squad
-- `identify_underperforming_players`: Find players not delivering points
-- `get_team_value_and_bank`: Check team value and available budget
-- `optimize_lineup_for_gameweek`: Best 11 players and captain for upcoming GW
+#### `get_current_gameweek_info()`
+**Use Cases:**
+- Check which gameweek is currently active
+- View current gameweek deadline and status
+- See average scores and highest score
 
-### Fixture Analysis Tools
-**Location:** `tools/fixture_tools.py` *(Coming Soon)*
+**Returns:** Current gameweek ID, name, deadline, status, and statistics
 
-- `analyze_upcoming_fixtures`: Fixture difficulty for teams over next N gameweeks
-- `get_fixtures_for_gameweek`: All matches in a specific gameweek
-- `find_teams_with_best_fixtures`: Identify teams with favorable schedules
-- `get_double_gameweek_teams`: Find teams with multiple fixtures in one GW
+**Example:** Ask "What gameweek are we in?" → Returns GW7 with deadline and scores
 
-### Transfer Strategy Tools
-**Location:** `tools/transfer_tools.py` *(Coming Soon)*
+---
 
-- `suggest_transfers`: AI-powered transfer recommendations
-- `calculate_transfer_impact`: Predict points gain/loss from specific transfer
-- `get_price_change_predictions`: Players likely to rise/fall in price
-- `get_differential_picks`: High-value, low-owned players for rank climbing
+#### `get_next_gameweek_info()`
+**Use Cases:**
+- Plan ahead for upcoming gameweek
+- Check next deadline
+- Prepare transfer strategy
 
-### Statistical Analysis Tools
-**Location:** `tools/statistics_tools.py` *(Coming Soon)*
+**Returns:** Next gameweek ID, name, and deadline
 
-- `get_top_scorers`: Highest scoring players overall or by position
-- `get_most_selected_players`: Most owned players across all managers
-- `calculate_effective_ownership`: Adjusted ownership including captaincy
-- `get_form_table`: Players ranked by recent form
+**Example:** Ask "When is the next gameweek?" → Returns GW8 deadline
+
+---
+
+#### `get_gameweek_by_number(gameweek_number: int)`
+**Use Cases:**
+- Review specific gameweek statistics
+- Analyze historical performance
+- Check past deadlines
+
+**Parameters:**
+- `gameweek_number`: Integer from 1-38
+
+**Returns:** Specific gameweek details, status, and statistics if finished
+
+**Example:** `get_gameweek_by_number(5)` → Returns GW5 information
+
+---
+
+#### `get_season_overview()`
+**Use Cases:**
+- Check season progress
+- See how many gameweeks remain
+- Understand timeline for planning
+
+**Returns:** Total gameweeks, current GW, finished/remaining counts, progress percentage
+
+**Example:** Ask "How far through the season are we?" → Returns 18% complete (7/38 GWs)
+
+---
+
+### Future Tool Categories *(Coming Soon)*
+
+#### Team Analysis Tools - `tools/team_tools.py`
+- `analyze_my_team`: Comprehensive squad analysis
+- `identify_underperforming_players`: Find players not delivering
+- `get_team_value_and_bank`: Check budget and team value
+- `optimize_lineup_for_gameweek`: Best 11 and captain selection
+
+#### Fixture Analysis Tools - `tools/fixture_tools.py`
+- `analyze_upcoming_fixtures`: Fixture difficulty analysis
+- `get_fixtures_for_gameweek`: All matches in specific GW
+- `find_teams_with_best_fixtures`: Identify favorable schedules
+- `get_double_gameweek_teams`: Find teams with multiple fixtures
+
+#### Transfer Strategy Tools - `tools/transfer_tools.py`
+- `suggest_transfers`: AI-powered recommendations
+- `calculate_transfer_impact`: Predict points gain/loss
+- `get_price_change_predictions`: Track price movements
+- `get_differential_picks`: High-value, low-owned players
 
 ---
 
 ### 🧪 Testing the Tools
 
-Run the demo script to see all tools in action:
+**Test Player Tools:**
 ```bash
 python demo_tools.py
 ```
 
-Run the test suite to verify all components:
+**Test Gameweek Tools:**
+```bash
+python test_gameweek_tools.py
+```
+
+**Test All Basic Functionality:**
 ```bash
 python test_basic.py
+```
+
+**Run Complete Test Suite:**
+```bash
+# All 8 tests should pass
+python test_basic.py
+
+# Expected output:
+# ✅ Configuration loads successfully
+# ✅ FPL Client initialized
+# ✅ Bootstrap API - Current gameweek: 7
+# ✅ Manager API - Team 7798096 found
+# ✅ Player API - Haaland found
+# ✅ Fixtures API - 380 fixtures loaded
+# ✅ Player tools working
+# ✅ Gameweek tools working
 ```
 
 ## 📊 Project Status
@@ -285,18 +398,50 @@ python test_basic.py
 - [x] Comprehensive testing suite
 - [x] Demo scripts and documentation
 
+### Completed ✅ (Phase 2 - Interactive CLI & Tools)
+- [x] **Interactive CLI** - `main.py`
+  - LangChain ReAct agent with custom prompts
+  - Optional team ID on startup (flexible exploration mode)
+  - Dynamic context engineering (adapts prompt based on team ID)
+  - Team ID validation and display
+  - Special commands (/team, /help, /clear, /log, /exit)
+  - Rich terminal UI with panels, tables, and markdown
+  - Conversation memory and streaming callbacks
+  - Error handling and graceful exits
+  - Query logging for evaluation and improvement
+- [x] **Gameweek Tools (4 tools)** - `tools/general_tools.py`
+  - get_current_gameweek_info
+  - get_next_gameweek_info
+  - get_gameweek_by_number
+  - get_season_overview
+- [x] **Complete Documentation**
+  - README.md with full project details
+  - TOOLS.md with comprehensive tool documentation
+  - TESTING_GUIDE.md for development workflow
+  - READY_TO_TEST.md for quick start testing
+
 ### In Progress 🚧
-- [ ] Team analysis tools - `tools/team_tools.py`
-- [ ] Fixture analysis tools - `tools/fixture_tools.py`
-- [ ] Transfer strategy tools - `tools/transfer_tools.py`
-- [ ] Statistical analysis tools - `tools/statistics_tools.py`
+- [ ] **Evaluation Framework** - `evals/`
+  - Behavior-based test cases (YAML)
+  - Automated evaluation runner
+  - Failed query tracking and analysis
+  - Performance metrics and reporting
 
 ### Upcoming 📋
-- [ ] ReAct agent implementation - `agents/fpl_agent.py`
-- [ ] Custom prompts for FPL context - `agents/prompts.py`
-- [ ] CLI interface - `main.py`
-- [ ] Strategy modules (predictions, recommendations)
-- [ ] Advanced features (gameweek briefings, price tracking)
+- [ ] **Additional Tool Categories**
+  - Team analysis tools - `tools/team_tools.py`
+  - Fixture analysis tools - `tools/fixture_tools.py`
+  - Transfer strategy tools - `tools/transfer_tools.py`
+  - Statistical analysis tools - `tools/statistics_tools.py`
+- [ ] **Advanced Features**
+  - Strategy modules (predictions, recommendations)
+  - Gameweek briefings automation
+  - Price change tracking and alerts
+  - Chip strategy recommendations
+- [ ] **Agent Improvements**
+  - Prompt optimization - `agents/prompts.py`
+  - Multi-agent workflows
+  - RAG integration for historical data
 
 ## 🤝 Contributing
 

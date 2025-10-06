@@ -3,6 +3,7 @@ Base FPL API Client with error handling, retries, and caching.
 """
 import requests
 import logging
+import time
 from typing import Dict, Any, Optional
 from functools import lru_cache
 from tenacity import retry, stop_after_attempt, wait_exponential
@@ -27,14 +28,16 @@ class FPLClient:
         self.session.headers.update({
             'User-Agent': 'FPL-Agent/1.0'
         })
+        self.last_request_time = 0
+        self.min_request_interval = 0.5  # Minimum 500ms between requests
     
     @retry(
-        stop=stop_after_attempt(3),
-        wait=wait_exponential(multiplier=1, min=2, max=10)
+        stop=stop_after_attempt(5),
+        wait=wait_exponential(multiplier=2, min=4, max=30)
     )
     def _make_request(self, endpoint: str, params: Optional[Dict] = None) -> Dict[str, Any]:
         """
-        Make HTTP request to FPL API with retry logic.
+        Make HTTP request to FPL API with retry logic and rate limiting.
         
         Args:
             endpoint: API endpoint path
@@ -46,13 +49,29 @@ class FPLClient:
         Raises:
             requests.HTTPError: If request fails after retries
         """
+        # Rate limiting: wait if we made a request too recently
+        time_since_last_request = time.time() - self.last_request_time
+        if time_since_last_request < self.min_request_interval:
+            sleep_time = self.min_request_interval - time_since_last_request
+            logger.debug(f"Rate limiting: sleeping for {sleep_time:.2f}s")
+            time.sleep(sleep_time)
+        
         url = f"{self.base_url}/{endpoint.lstrip('/')}"
         
         try:
             logger.debug(f"Making request to: {url}")
-            response = self.session.get(url, params=params, timeout=10)
+            response = self.session.get(url, params=params, timeout=15)
+            self.last_request_time = time.time()  # Update last request time
             response.raise_for_status()
             return response.json()
+        except requests.exceptions.HTTPError as e:
+            # Handle rate limiting specifically
+            if response.status_code == 429:
+                logger.warning(f"Rate limited by FPL API. Waiting before retry...")
+                time.sleep(5)  # Wait 5 seconds before retry
+                raise  # Will trigger retry with exponential backoff
+            logger.error(f"HTTP error for {url}: {str(e)}")
+            raise
         except requests.exceptions.RequestException as e:
             logger.error(f"Request failed for {url}: {str(e)}")
             raise

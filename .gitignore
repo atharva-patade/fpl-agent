@@ -54,3 +54,4 @@ cache/
 logs/
 *.log
 data/
+evals/failed_queries.jsonl
