@@ -1,0 +1,280 @@
+{
+  "summary": {
+    "total_tests": 16,
+    "passed": 16,
+    "failed": 0,
+    "pass_rate": 100.0,
+    "avg_execution_time": 2.9875463124999997
+  },
+  "category_stats": {
+    "player_search": {
+      "total": 3,
+      "passed": 3,
+      "failed": 0
+    },
+    "player_stats": {
+      "total": 4,
+      "passed": 4,
+      "failed": 0
+    },
+    "player_comparison": {
+      "total": 4,
+      "passed": 4,
+      "failed": 0
+    },
+    "find_best_players": {
+      "total": 5,
+      "passed": 5,
+      "failed": 0
+    }
+  },
+  "results": [
+    {
+      "test_id": "player_search_001",
+      "category": "player_search",
+      "query": "Find Mohamed Salah",
+      "expected_tools": [
+        "search_player_by_name"
+      ],
+      "actual_tools": [
+        "search_player_by_name"
+      ],
+      "passed": true,
+      "error": null,
+      "response": "Mohamed Salah (Liverpool) is a midfielder priced at \u00a314.4m, with 34 FPL points, a form rating of 4.5, and is selected by 39.6% of managers.",
+      "execution_time": 2.47352
+    },
+    {
+      "test_id": "player_search_002",
+      "category": "player_search",
+      "query": "Who is Haaland?",
+      "expected_tools": [
+        "search_player_by_name"
+      ],
+      "actual_tools": [
+        "search_player_by_name"
+      ],
+      "passed": true,
+      "error": null,
+      "response": "Erling Haaland is a forward for Manchester City in FPL. He is priced at \u00a314.5m, has scored 70 points so far, is in excellent form (11.5), and is selected by 60.2% of managers.",
+      "execution_time": 1.757731
+    },
+    {
+      "test_id": "player_search_003",
+      "category": "player_search",
+      "query": "Search for Bukayo Saka",
+      "expected_tools": [
+        "search_player_by_name"
+      ],
+      "actual_tools": [
+        "search_player_by_name"
+      ],
+      "passed": true,
+      "error": null,
+      "response": "Bukayo Saka is an Arsenal midfielder in FPL, priced at \u00a39.9m. He currently has 20 points, a form rating of 2.8, and is selected by 9.3% of managers.",
+      "execution_time": 1.838241
+    },
+    {
+      "test_id": "player_stats_001",
+      "category": "player_stats",
+      "query": "Show me Salah's detailed stats",
+      "expected_tools": [
+        "get_player_detailed_stats"
+      ],
+      "actual_tools": [
+        "get_player_detailed_stats"
+      ],
+      "passed": true,
+      "error": null,
+      "response": "Here are Mohamed Salah's detailed FPL stats:\n- Position: Midfielder (Liverpool)\n- Price: \u00a314.4m | Ownership: 39.6%\n- Total Points: 34 (4.9 per game, form 4.5)\n- Goals: 2 | Assists: 2 | Clean Sheets: 2\n- Last 5 GWs: 21 points (4.2 avg), 450 minutes\n- Next 5 fixtures: MUN (H), BRE (A), AVL (H), MCI (A), NFO (H) \u2014 mostly moderate difficulty\n- Points per \u00a31m: 2.4 | ICT Index: 49.2\n\nHe remains a premium, reliable option with steady output and strong fixtures ahead.",
+      "execution_time": 2.912801
+    },
+    {
+      "test_id": "player_stats_002",
+      "category": "player_stats",
+      "query": "What are Haaland's stats this season?",
+      "expected_tools": [
+        "get_player_detailed_stats"
+      ],
+      "actual_tools": [
+        "get_player_detailed_stats"
+      ],
+      "passed": true,
+      "error": null,
+      "response": "Erling Haaland (Man City, \u00a314.5m) has scored 9 goals and provided 1 assist this season, earning 70 FPL points (10.0 points per game, form 11.5). He\u2019s played 431 minutes in the last 5 GWs, scoring 55 points (11.0 avg). Haaland\u2019s ownership is 60.2%, with strong value metrics (4.8 points per \u00a31m, ICT Index 76.8). Upcoming fixtures include Everton (H), Aston Villa (A), Bournemouth (H), Liverpool (H), and Newcastle (A).",
+      "execution_time": 3.523453
+    },
+    {
+      "test_id": "player_stats_003",
+      "category": "player_stats",
+      "query": "Give me a full analysis of Kevin De Bruyne",
+      "expected_tools": [
+        "get_player_detailed_stats"
+      ],
+      "actual_tools": [
+        "get_player_detailed_stats",
+        "search_player_by_name"
+      ],
+      "passed": true,
+      "error": null,
+      "response": "Kevin De Bruyne is currently not registered in the FPL database for this season. This may be due to a transfer outside the Premier League, a long-term injury, or not being listed for FPL selection. Please check recent news or official FPL updates for his status. If you want analysis on another player or updated options, let me know!",
+      "execution_time": 2.835977
+    },
+    {
+      "test_id": "player_stats_004",
+      "category": "player_stats",
+      "query": "How is Son performing?",
+      "expected_tools": [
+        "get_player_detailed_stats"
+      ],
+      "actual_tools": [
+        "get_player_detailed_stats",
+        "search_player_by_name",
+        "search_player_by_name",
+        "search_player_by_name"
+      ],
+      "passed": true,
+      "error": null,
+      "response": "Heung-Min Son does not appear to be registered in the current FPL database for this season, so I am unable to provide his performance stats at this time. If you meant a different player or want stats for another Tottenham midfielder, please specify.",
+      "execution_time": 5.695032
+    },
+    {
+      "test_id": "player_comparison_001",
+      "category": "player_comparison",
+      "query": "Compare Haaland and Watkins",
+      "expected_tools": [
+        "compare_two_players"
+      ],
+      "actual_tools": [
+        "compare_two_players"
+      ],
+      "passed": true,
+      "error": null,
+      "response": "Erling Haaland is outperforming Ollie Watkins across all key FPL metrics: more points (70 vs 20), higher form (11.5 vs 3.5), more goals (9 vs 1), and better value (4.8 vs 2.3 pts/\u00a3m). Haaland is the stronger pick, though he is significantly more expensive. Watkins could be considered only if budget constraints prevent owning Haaland.",
+      "execution_time": 2.356489
+    },
+    {
+      "test_id": "player_comparison_002",
+      "category": "player_comparison",
+      "query": "Who is better: Salah or Son?",
+      "expected_tools": [
+        "compare_two_players"
+      ],
+      "actual_tools": [
+        "compare_two_players",
+        "search_player_by_name",
+        "search_player_by_name",
+        "compare_two_players"
+      ],
+      "passed": true,
+      "error": null,
+      "response": "Mohamed Salah is currently performing much better than Son Heung-min in FPL. Salah has 34 points, strong form, and consistent attacking returns, while Son has 0 points and no recent impact. Salah is the clear data-driven choice at this time.",
+      "execution_time": 5.724048
+    },
+    {
+      "test_id": "player_comparison_003",
+      "category": "player_comparison",
+      "query": "Haaland vs Isak - which one should I pick?",
+      "expected_tools": [
+        "compare_two_players"
+      ],
+      "actual_tools": [
+        "compare_two_players"
+      ],
+      "passed": true,
+      "error": null,
+      "response": "Erling Haaland is a significantly better FPL pick than Alexander Isak based on all key metrics: points, form, goals, and value for money. Haaland is delivering high returns and has strong ownership, making him the clear choice.",
+      "execution_time": 2.148649
+    },
+    {
+      "test_id": "player_comparison_004",
+      "category": "player_comparison",
+      "query": "What's the difference between Saka and Foden?",
+      "expected_tools": [
+        "compare_two_players"
+      ],
+      "actual_tools": [
+        "compare_two_players"
+      ],
+      "passed": true,
+      "error": null,
+      "response": "Saka and Foden both have 20 total points and average 4.0 points per game, but Foden is \u00a31.8m cheaper, offers better current form (4.8 vs 2.8), and provides higher value (2.5 pts/\u00a3m vs 2.0 pts/\u00a3m). Saka has more goals, while Foden has more clean sheets. Foden is currently outperforming Saka for value and form.",
+      "execution_time": 2.458034
+    },
+    {
+      "test_id": "find_players_001",
+      "category": "find_best_players",
+      "query": "Find best midfielders under \u00a38m",
+      "expected_tools": [
+        "find_best_players_by_position"
+      ],
+      "actual_tools": [
+        "find_best_players_by_position"
+      ],
+      "passed": true,
+      "error": null,
+      "response": "The best midfielders under \u00a38m (based on points per million and recent form) are:\n\n1. Antoine Semenyo (BOU) - \u00a37.9m, 66 pts, excellent form (10.8)\n2. Mois\u00e9s Caicedo (CHE) - \u00a35.7m, 45 pts, strong PPM (7.9)\n3. Josh Cullen (BUR) - \u00a35.0m, 37 pts, solid budget option\n4. Jaidon Anthony (BUR) - \u00a35.7m, 41 pts, good value\n5. James Garner (EVE) - \u00a35.0m, 33 pts, budget enabler\n6. Anton Stach (LEE) - \u00a35.0m, 33 pts, steady performer\n7. Ryan Gravenberch (LIV) - \u00a35.7m, 37 pts, good form (7.0)\n8. Granit Xhaka (SUN) - \u00a35.0m, 32 pts\n9. Declan Rice (ARS) - \u00a36.5m, 40 pts, nailed starter\n10. Enzo Fern\u00e1ndez (CHE) - \u00a36.7m, 41 pts\n\nSemenyo stands out for explosive form and points potential. For budget picks, Cullen, Garner, and Stach are solid.",
+      "execution_time": 3.330552
+    },
+    {
+      "test_id": "find_players_002",
+      "category": "find_best_players",
+      "query": "Who are the top forwards under \u00a310m?",
+      "expected_tools": [
+        "find_best_players_by_position"
+      ],
+      "actual_tools": [
+        "find_best_players_by_position"
+      ],
+      "passed": true,
+      "error": null,
+      "response": "The top forwards under \u00a310m (by points per million, minimum 200 minutes) are:\n\n1. Igor Thiago (BRE) \u2013 \u00a36.1m, 32 pts, PPM: 5.2\n2. Jo\u00e3o Pedro (CHE) \u2013 \u00a37.7m, 39 pts, PPM: 5.1\n3. Wilson Isidor (SUN) \u2013 \u00a35.6m, 28 pts, PPM: 5.0\n4. Richarlison (TOT) \u2013 \u00a36.8m, 32 pts, PPM: 4.7\n5. Jarrod Bowen (WHU) \u2013 \u00a37.7m, 35 pts, PPM: 4.5\n6. Lyle Foster (BUR) \u2013 \u00a35.0m, 21 pts, PPM: 4.2\n7. Hugo Ekitik\u00e9 (LIV) \u2013 \u00a38.7m, 33 pts, PPM: 3.8\n8. Nick Woltemade (NEW) \u2013 \u00a37.2m, 24 pts, PPM: 3.3\n9. Dominic Calvert-Lewin (LEE) \u2013 \u00a35.5m, 18 pts, PPM: 3.3\n10. Chris Wood (NFO) \u2013 \u00a37.4m, 24 pts, PPM: 3.2\n\nIgor Thiago, Jo\u00e3o Pedro, and Wilson Isidor offer the best value among forwards under \u00a310m.",
+      "execution_time": 3.603107
+    },
+    {
+      "test_id": "find_players_003",
+      "category": "find_best_players",
+      "query": "Show me cheap defenders",
+      "expected_tools": [
+        "find_best_players_by_position"
+      ],
+      "actual_tools": [
+        "find_best_players_by_position"
+      ],
+      "passed": true,
+      "error": null,
+      "response": "Here are the top cheap defenders (under \u00a34.5m, minimum 200 minutes played):\n\n1. Omar Alderete (SUN) \u2013 \u00a34.1m | Points: 39 | PPM: 9.5 | Form: 7.5\n2. Michael Keane (EVE) \u2013 \u00a34.5m | Points: 35 | PPM: 7.8 | Form: 5.5\n3. Joe Rodon (LEE) \u2013 \u00a34.0m | Points: 30 | PPM: 7.5 | Form: 3.5\n4. Chris Richards (CRY) \u2013 \u00a34.5m | Points: 33 | PPM: 7.3 | Form: 4.2\n5. Adrien Truffert (BOU) \u2013 \u00a34.5m | Points: 32 | PPM: 7.1 | Form: 4.8\n\nOmar Alderete and Joe Rodon offer the best value for very low prices. Alderete has the highest points per million and current form. Consider these players if you need budget-friendly defensive options.",
+      "execution_time": 3.116934
+    },
+    {
+      "test_id": "find_players_004",
+      "category": "find_best_players",
+      "query": "Best value goalkeepers?",
+      "expected_tools": [
+        "find_best_players_by_position"
+      ],
+      "actual_tools": [
+        "find_best_players_by_position"
+      ],
+      "passed": true,
+      "error": null,
+      "response": "The best value goalkeepers by points per million (PPM) are:\n\n1. Robin Roefs (SUN) \u2013 \u00a34.6m, 8.9 PPM\n2. Nick Pope (NEW) \u2013 \u00a35.1m, 8.0 PPM\n3. Guglielmo Vicario (TOT) \u2013 \u00a35.1m, 6.9 PPM\n4. \u0110or\u0111e Petrovi\u0107 (BOU) \u2013 \u00a34.5m, 6.0 PPM\n5. David Raya Mart\u00edn (ARS) \u2013 \u00a35.7m, 6.0 PPM\n\nRoefs and Pope currently offer the highest value for money. For budget options, consider Roefs or Petrovi\u0107; for premium fixtures, Pope, Vicario, or Raya are strong picks.",
+      "execution_time": 2.332061
+    },
+    {
+      "test_id": "find_players_005",
+      "category": "find_best_players",
+      "query": "Which midfielders give the best points per million?",
+      "expected_tools": [
+        "find_best_players_by_position"
+      ],
+      "actual_tools": [
+        "find_best_players_by_position"
+      ],
+      "passed": true,
+      "error": null,
+      "response": "The best midfielders for points per million currently are:\n\n1. Antoine Semenyo (BOU) \u2013 8.4 PPM\n2. Mois\u00e9s Caicedo Corozo (CHE) \u2013 7.9 PPM\n3. Josh Cullen (BUR) \u2013 7.4 PPM\n4. Jaidon Anthony (BUR) \u2013 7.2 PPM\n5. James Garner (EVE) \u2013 6.6 PPM\n\nThese options offer high value relative to their price, making them strong budget-friendly picks for your FPL squad.",
+      "execution_time": 1.694112
+    }
+  ]
+}

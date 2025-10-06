@@ -1,9 +1,12 @@
 """
 General FPL Tools - gameweek info, season overview, general FPL data
 """
+from typing import Any
+
 from langchain.tools import tool
 from fpl_api.client import FPLClient
 from fpl_api.bootstrap import BootstrapAPI
+from tools.utils.input_parser import parse_tool_input, GameweekLookupParams
 
 
 # Lazy initialization
@@ -84,17 +87,24 @@ def get_next_gameweek_info() -> str:
 
 
 @tool
-def get_gameweek_by_number(gameweek_number: int) -> str:
+def get_gameweek_by_number(tool_input: Any) -> str:
     """
     Get detailed information about a specific gameweek by its number.
     Use this when users ask about a specific gameweek (e.g., "Tell me about gameweek 10" or "What happened in GW5").
     
-    Args:
-        gameweek_number: The gameweek number (1-38)
-        
     Returns:
         Gameweek information including deadline, scores, and status
     """
+    params, error = parse_tool_input(
+        tool_input,
+        GameweekLookupParams,
+        primary_field="gameweek_number",
+        example='{"gameweek_number": 25}',
+    )
+    if error:
+        return error
+
+    gameweek_number = params.gameweek_number
     api = get_bootstrap_api()
     all_gws = api.get_all_gameweeks()
     

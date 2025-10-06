@@ -155,7 +155,7 @@ try:
     
     # Test a simple tool call
     print("\n   Testing search_player_by_name tool:")
-    result = search_player_by_name.invoke({"name": "Haaland"})
+    result = search_player_by_name.invoke("Erling Haaland")
     print(f"   {result[:200]}..." if len(result) > 200 else f"   {result}")
     
 except Exception as e:

@@ -43,6 +43,13 @@ from tools.general_tools import (
     get_gameweek_by_number,
     get_season_overview
 )
+from tools.team_tools import (
+    get_my_team,
+    get_my_team_summary,
+    get_my_transfers,
+    analyze_my_team_performance,
+    get_team_value_breakdown
+)
 
 
 class StreamingCallbackHandler(BaseCallbackHandler):
@@ -160,14 +167,22 @@ Your intelligent Fantasy Premier League assistant powered by Azure OpenAI.
         
         # Define tools
         tools = [
+            # Player analysis tools
             search_player_by_name,
             get_player_detailed_stats,
             compare_two_players,
             find_best_players_by_position,
+            # Gameweek tools
             get_current_gameweek_info,
             get_next_gameweek_info,
             get_gameweek_by_number,
-            get_season_overview
+            get_season_overview,
+            # Team tools
+            get_my_team,
+            get_my_team_summary,
+            get_my_transfers,
+            analyze_my_team_performance,
+            get_team_value_breakdown
         ]
         
         # Create custom prompt
@@ -199,13 +214,14 @@ Your intelligent Fantasy Premier League assistant powered by Azure OpenAI.
         # Dynamic team context based on whether team ID is set
         team_context = ""
         if self.team_id:
-            team_context = f"\n\n**USER'S TEAM ID:** {self.team_id}\nYou can access their team information when needed."
+            team_context = f"\n\n**USER'S TEAM ID:** {self.team_id}\nYou have access to their team information. Use team tools like get_my_team, get_my_team_summary, get_my_transfers, analyze_my_team_performance, and get_team_value_breakdown when the user asks about their team."
         else:
-            team_context = "\n\n**USER'S TEAM ID:** Not provided yet.\nIf the user asks team-specific questions (e.g., 'analyze my team', 'what transfers should I make'), politely ask them to provide their FPL Team ID using the `/team` command."
+            team_context = "\n\n**USER'S TEAM ID:** Not provided yet.\nIf the user asks team-specific questions (e.g., 'show my team', 'analyze my team', 'what transfers should I make'), politely ask them to provide their FPL Team ID using the `/team` command."
         
-        template = f"""You are an expert Fantasy Premier League (FPL) advisor with deep knowledge of football statistics, player performance, and FPL strategy.
+    # Build template without f-string to avoid issues with JSON example curly braces
+        template = """You are an expert Fantasy Premier League (FPL) advisor with deep knowledge of football statistics, player performance, and FPL strategy.
 
-**CURRENT CONTEXT:**{team_context}
+**CURRENT CONTEXT:**""" + team_context + """
 
 **YOUR ROLE:**
 - Provide data-driven insights using the available tools
@@ -214,22 +230,42 @@ Your intelligent Fantasy Premier League assistant powered by Azure OpenAI.
 - Use statistics to back up your recommendations
 
 **GUIDELINES:**
-1. **When asked about the user's team:** If Team ID is NOT provided, ask them to set it using `/team` command
-2. **For general questions:** Use the tools to gather information and provide analysis
+1. **When asked about the user's team:** 
+   - If Team ID is provided, use team tools (get_my_team, get_my_team_summary, etc.)
+   - If Team ID is NOT provided, ask them to set it using `/team` command
+2. **For general questions:** Use the player and gameweek tools to gather information
 3. **Always use tools:** Don't make up statistics - use the tools to get real data
 4. **Be concise:** Provide clear, actionable advice
 5. **Explain your reasoning:** Show the data behind your recommendations
 
+**AVAILABLE TOOLS:**
+- Player Tools: search_player_by_name, get_player_detailed_stats, compare_two_players, find_best_players_by_position
+- Gameweek Tools: get_current_gameweek_info, get_next_gameweek_info, get_gameweek_by_number, get_season_overview
+- Team Tools (require team_id): get_my_team, get_my_team_summary, get_my_transfers, analyze_my_team_performance, get_team_value_breakdown
+
+**IMPORTANT - TOOL INPUT FORMAT:**
+- Tools accept plain strings for single-field inputs (e.g., "Mohamed Salah") and JSON objects for multiple fields.
+- Use JSON when providing optional filters or multiple parameters (team tools, comparisons, value searches).
+- Examples of JSON payloads:
+    - compare_two_players: JSON keys `player1_name` and `player2_name` (e.g., Erling Haaland vs Ollie Watkins)
+    - find_best_players_by_position: JSON keys `position` plus optional `max_price`, `min_price`, `min_minutes`
+    - get_my_team: JSON keys `team_id` (required) and optional `gameweek`
+
+**EXAMPLES:**
+- To find forwards under 10m pounds: Use find_best_players_by_position with position Forward and max_price 10.0
+- To compare players: Use compare_two_players with both player names
+- To search for a player: Use search_player_by_name with the player name as a simple string
+
 You have access to the following tools:
 
-{{tools}}
+{tools}
 
 Use the following format:
 
 Question: the input question you must answer
 Thought: you should always think about what to do
-Action: the action to take, should be one of [{{tool_names}}]
-Action Input: the input to the action
+Action: the action to take, should be one of [{tool_names}]
+Action Input: the input to the action (use JSON format for multiple parameters)
 Observation: the result of the action
 ... (this Thought/Action/Action Input/Observation can repeat N times)
 Thought: I now know the final answer
@@ -237,8 +273,8 @@ Final Answer: the final answer to the original input question
 
 Begin!
 
-Question: {{input}}
-Thought:{{agent_scratchpad}}"""
+Question: {input}
+Thought:{agent_scratchpad}"""
         
         return PromptTemplate(
             template=template,

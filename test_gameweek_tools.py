@@ -24,7 +24,7 @@ print(result)
 
 print("\n3️⃣ Testing get_gameweek_by_number(7)...")
 print("-" * 80)
-result = get_gameweek_by_number.invoke({"gameweek_number": 7})
+result = get_gameweek_by_number.invoke('{"gameweek_number": 7}')
 print(result)
 
 print("\n4️⃣ Testing get_season_overview()...")

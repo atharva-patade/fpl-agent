@@ -1,0 +1,293 @@
+# FPL Agent Evaluation Test Cases
+# Each test case includes a query and the expected tools that should be called
+
+version: "1.0"
+description: "Tool selection evaluation for FPL Agent"
+
+test_cases:
+  # Player Search Tests
+  - id: "player_search_001"
+    category: "player_search"
+    query: "Find Mohamed Salah"
+    expected_tools:
+      - "search_player_by_name"
+    description: "Basic player search by name"
+
+  - id: "player_search_002"
+    category: "player_search"
+    query: "Who is Haaland?"
+    expected_tools:
+      - "search_player_by_name"
+    description: "Natural language player lookup"
+
+  - id: "player_search_003"
+    category: "player_search"
+    query: "Search for Bukayo Saka"
+    expected_tools:
+      - "search_player_by_name"
+    description: "Explicit search request"
+
+  # Player Detailed Stats Tests
+  - id: "player_stats_001"
+    category: "player_stats"
+    query: "Show me Salah's detailed stats"
+    expected_tools:
+      - "get_player_detailed_stats"
+    description: "Request for detailed player statistics"
+
+  - id: "player_stats_002"
+    category: "player_stats"
+    query: "What are Haaland's stats this season?"
+    expected_tools:
+      - "get_player_detailed_stats"
+    description: "Season stats request"
+
+  - id: "player_stats_003"
+    category: "player_stats"
+    query: "Give me a full analysis of Kevin De Bruyne"
+    expected_tools:
+      - "get_player_detailed_stats"
+    description: "Full player analysis"
+
+  - id: "player_stats_004"
+    category: "player_stats"
+    query: "How is Son performing?"
+    expected_tools:
+      - "get_player_detailed_stats"
+    description: "Performance inquiry"
+
+  # Player Comparison Tests
+  - id: "player_comparison_001"
+    category: "player_comparison"
+    query: "Compare Haaland and Watkins"
+    expected_tools:
+      - "compare_two_players"
+    description: "Direct comparison request"
+
+  - id: "player_comparison_002"
+    category: "player_comparison"
+    query: "Who is better: Salah or Son?"
+    expected_tools:
+      - "compare_two_players"
+    description: "Better/worse comparison"
+
+  - id: "player_comparison_003"
+    category: "player_comparison"
+    query: "Haaland vs Isak - which one should I pick?"
+    expected_tools:
+      - "compare_two_players"
+    description: "Transfer decision comparison"
+
+  - id: "player_comparison_004"
+    category: "player_comparison"
+    query: "What's the difference between Saka and Foden?"
+    expected_tools:
+      - "compare_two_players"
+    description: "Difference inquiry"
+
+  # Find Best Players Tests
+  - id: "find_players_001"
+    category: "find_best_players"
+    query: "Find best midfielders under £8m"
+    expected_tools:
+      - "find_best_players_by_position"
+    description: "Best players by position with budget"
+
+  - id: "find_players_002"
+    category: "find_best_players"
+    query: "Who are the top forwards under £10m?"
+    expected_tools:
+      - "find_best_players_by_position"
+    description: "Top players with price constraint"
+
+  - id: "find_players_003"
+    category: "find_best_players"
+    query: "Show me cheap defenders"
+    expected_tools:
+      - "find_best_players_by_position"
+    description: "Budget player search"
+
+  - id: "find_players_004"
+    category: "find_best_players"
+    query: "Best value goalkeepers?"
+    expected_tools:
+      - "find_best_players_by_position"
+    description: "Value search by position"
+
+  - id: "find_players_005"
+    category: "find_best_players"
+    query: "Which midfielders give the best points per million?"
+    expected_tools:
+      - "find_best_players_by_position"
+    description: "Value metric inquiry"
+
+  # Gameweek Info Tests
+  - id: "gameweek_current_001"
+    category: "gameweek_current"
+    query: "What gameweek are we in?"
+    expected_tools:
+      - "get_current_gameweek_info"
+    description: "Current gameweek inquiry"
+
+  - id: "gameweek_current_002"
+    category: "gameweek_current"
+    query: "What's the current gameweek?"
+    expected_tools:
+      - "get_current_gameweek_info"
+    description: "Current GW alternate phrasing"
+
+  - id: "gameweek_current_003"
+    category: "gameweek_current"
+    query: "When is the deadline?"
+    expected_tools:
+      - "get_current_gameweek_info"
+    description: "Deadline inquiry"
+
+  - id: "gameweek_current_004"
+    category: "gameweek_current"
+    query: "What's the average score this week?"
+    expected_tools:
+      - "get_current_gameweek_info"
+    description: "Current GW statistics"
+
+  # Next Gameweek Tests
+  - id: "gameweek_next_001"
+    category: "gameweek_next"
+    query: "When is the next gameweek?"
+    expected_tools:
+      - "get_next_gameweek_info"
+    description: "Next gameweek inquiry"
+
+  - id: "gameweek_next_002"
+    category: "gameweek_next"
+    query: "What's the next deadline?"
+    expected_tools:
+      - "get_next_gameweek_info"
+    description: "Next deadline request"
+
+  - id: "gameweek_next_003"
+    category: "gameweek_next"
+    query: "When do I need to make transfers by?"
+    expected_tools:
+      - "get_next_gameweek_info"
+    description: "Transfer deadline inquiry"
+
+  # Specific Gameweek Tests
+  - id: "gameweek_specific_001"
+    category: "gameweek_specific"
+    query: "Show me gameweek 5 information"
+    expected_tools:
+      - "get_gameweek_by_number"
+    description: "Specific GW lookup"
+
+  - id: "gameweek_specific_002"
+    category: "gameweek_specific"
+    query: "What was the average score in GW3?"
+    expected_tools:
+      - "get_gameweek_by_number"
+    description: "Historical GW stats"
+
+  # Season Overview Tests
+  - id: "season_overview_001"
+    category: "season_overview"
+    query: "How far through the season are we?"
+    expected_tools:
+      - "get_season_overview"
+    description: "Season progress inquiry"
+
+  - id: "season_overview_002"
+    category: "season_overview"
+    query: "How many gameweeks are left?"
+    expected_tools:
+      - "get_season_overview"
+    description: "Remaining gameweeks"
+
+  - id: "season_overview_003"
+    category: "season_overview"
+    query: "What's the season progress?"
+    expected_tools:
+      - "get_season_overview"
+    description: "Progress percentage inquiry"
+
+  # Team Analysis Tests (require team_id)
+  - id: "team_info_001"
+    category: "team_info"
+    query: "Show me my team"
+    expected_tools:
+      - "get_my_team"
+    description: "View team request"
+    requires_team_id: true
+
+  - id: "team_info_002"
+    category: "team_info"
+    query: "What's my team summary?"
+    expected_tools:
+      - "get_my_team_summary"
+    description: "Team summary request"
+    requires_team_id: true
+
+  - id: "team_info_003"
+    category: "team_info"
+    query: "Show me my transfers"
+    expected_tools:
+      - "get_my_transfers"
+    description: "Transfer history request"
+    requires_team_id: true
+
+  - id: "team_analysis_001"
+    category: "team_analysis"
+    query: "Analyze my team performance"
+    expected_tools:
+      - "analyze_my_team_performance"
+    description: "Team performance analysis"
+    requires_team_id: true
+
+  - id: "team_value_001"
+    category: "team_value"
+    query: "What's my team value?"
+    expected_tools:
+      - "get_team_value_breakdown"
+    description: "Team value inquiry"
+    requires_team_id: true
+
+  # Multi-tool Tests (complex queries)
+  - id: "multi_tool_001"
+    category: "multi_tool"
+    query: "Compare Haaland and Watkins, then find other forwards under £10m"
+    expected_tools:
+      - "compare_two_players"
+      - "find_best_players_by_position"
+    description: "Comparison followed by search"
+
+  - id: "multi_tool_002"
+    category: "multi_tool"
+    query: "What gameweek are we in and who should I captain?"
+    expected_tools:
+      - "get_current_gameweek_info"
+      - "get_player_detailed_stats"
+    description: "Gameweek info + player analysis"
+    notes: "May also use find_best_players_by_position"
+
+  - id: "multi_tool_003"
+    category: "multi_tool"
+    query: "Show me Salah's stats and compare him to Son"
+    expected_tools:
+      - "get_player_detailed_stats"
+      - "compare_two_players"
+    description: "Stats then comparison"
+
+# Metadata
+total_test_cases: 35
+categories:
+  - player_search
+  - player_stats
+  - player_comparison
+  - find_best_players
+  - gameweek_current
+  - gameweek_next
+  - gameweek_specific
+  - season_overview
+  - team_info
+  - team_analysis
+  - team_value
+  - multi_tool
